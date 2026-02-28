@@ -39,6 +39,16 @@ export default function Footer({ onReset }: FooterProps) {
         >
           Privacy
         </Link>
+        <Link
+          href="/roadmap"
+          style={{
+            color: "#555",
+            textDecoration: "none",
+            fontSize: "11px",
+          }}
+        >
+          Roadmap
+        </Link>
       </div>
       <button
         onClick={onReset}
