@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         "X-Title": "Soulprint",
       },
       body: JSON.stringify({
-        model: "anthropic/claude-sonnet-4-20250514",
+        model: "anthropic/claude-sonnet-4",
         max_tokens: 4096,
         messages: [
           { role: "system", content: ANALYSIS_SYSTEM_PROMPT },
