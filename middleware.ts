@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
+const secureCookieName = "__Secure-authjs.session-token";
+const devCookieName = "authjs.session-token";
+
 export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const isSecure = req.nextUrl.protocol === "https:";
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+    cookieName: isSecure ? secureCookieName : devCookieName,
+  });
   const isAuthed = !!token;
 
   if (req.nextUrl.pathname.startsWith("/api/analyze")) {
