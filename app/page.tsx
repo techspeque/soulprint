@@ -87,6 +87,22 @@ export default function LandingPage() {
       >
         Get started →
       </Link>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: "24px",
+          fontSize: "12px",
+          fontFamily: "'Courier New', monospace",
+        }}
+      >
+        <Link
+          href="/privacy"
+          style={{ color: "#555", textDecoration: "none" }}
+        >
+          Privacy Policy
+        </Link>
+      </div>
     </div>
   );
 }

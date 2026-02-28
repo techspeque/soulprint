@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface FooterProps {
   onReset: () => void;
 }
@@ -18,10 +20,25 @@ export default function Footer({ onReset }: FooterProps) {
           fontSize: "12px",
           color: "#333",
           fontFamily: "'Courier New', monospace",
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
         }}
       >
-        <span style={{ color: "#E8927C55" }}>SOUL</span>
-        <span style={{ color: "#55555588" }}>PRINT</span>
+        <span>
+          <span style={{ color: "#E8927C55" }}>SOUL</span>
+          <span style={{ color: "#55555588" }}>PRINT</span>
+        </span>
+        <Link
+          href="/privacy"
+          style={{
+            color: "#555",
+            textDecoration: "none",
+            fontSize: "11px",
+          }}
+        >
+          Privacy
+        </Link>
       </div>
       <button
         onClick={onReset}
