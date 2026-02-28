@@ -67,10 +67,11 @@ export const kvAdapter: Adapter = {
 
   async useVerificationToken({ identifier, token }) {
     const key = `vt:${identifier}:${token}`;
+    console.log("[kv-adapter] useVerificationToken key:", key);
     const stored = await kv.get<VerificationToken>(key);
+    console.log("[kv-adapter] useVerificationToken result:", stored);
     if (!stored) return null;
     await kv.del(key);
-    // Rehydrate expires from string to Date (JSON serialization loses Date type)
     return {
       ...stored,
       expires: new Date(stored.expires),
