@@ -15,13 +15,17 @@ export const kvAdapter: Adapter = {
   },
 
   async getUser(id) {
-    return await kv.get<AdapterUser>(`user:${id}`);
+    const user = await kv.get<AdapterUser>(`user:${id}`);
+    if (!user) return null;
+    return { ...user, emailVerified: user.emailVerified ? new Date(user.emailVerified) : null };
   },
 
   async getUserByEmail(email) {
     const id = await kv.get<string>(`user:email:${email}`);
     if (!id) return null;
-    return await kv.get<AdapterUser>(`user:${id}`);
+    const user = await kv.get<AdapterUser>(`user:${id}`);
+    if (!user) return null;
+    return { ...user, emailVerified: user.emailVerified ? new Date(user.emailVerified) : null };
   },
 
   async getUserByAccount() {
@@ -66,6 +70,10 @@ export const kvAdapter: Adapter = {
     const stored = await kv.get<VerificationToken>(key);
     if (!stored) return null;
     await kv.del(key);
-    return stored;
+    // Rehydrate expires from string to Date (JSON serialization loses Date type)
+    return {
+      ...stored,
+      expires: new Date(stored.expires),
+    };
   },
 };
