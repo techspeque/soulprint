@@ -1,9 +1,12 @@
+import { useRef, useState } from "react";
 import ClusterGrid from "./ClusterGrid";
 import ClusterDetail from "./ClusterDetail";
 import EmotionalSpectrum from "./EmotionalSpectrum";
 import TensionPanel from "./TensionPanel";
 import SummaryPanel from "./SummaryPanel";
 import Footer from "./Footer";
+import ShareCard from "./ShareCard";
+import { captureShareCard } from "@/lib/share";
 
 export interface AnalysisCluster {
   name: string;
@@ -42,8 +45,22 @@ export default function ResultsView({
   setSelectedCluster,
   onReset,
 }: ResultsViewProps) {
+  const shareCardRef = useRef<HTMLDivElement>(null);
+  const [sharing, setSharing] = useState(false);
+
+  async function handleDownload() {
+    if (!shareCardRef.current || sharing) return;
+    setSharing(true);
+    try {
+      await captureShareCard(shareCardRef.current);
+    } finally {
+      setSharing(false);
+    }
+  }
+
   return (
     <div style={{ paddingTop: "60px", animation: "fadeUp 0.8s ease" }}>
+      <ShareCard ref={shareCardRef} analysis={analysis} songCount={songCount} />
       {/* Hero */}
       <div
         style={{
@@ -107,6 +124,27 @@ export default function ResultsView({
             &ldquo;{analysis.oneLiner}&rdquo;
           </div>
         )}
+
+        <button
+          onClick={handleDownload}
+          disabled={sharing}
+          style={{
+            marginTop: "24px",
+            padding: "10px 20px",
+            background: "transparent",
+            border: "1px solid rgba(232,146,124,0.3)",
+            color: "#E8927C",
+            fontSize: "12px",
+            letterSpacing: "3px",
+            textTransform: "uppercase",
+            fontFamily: "'Courier New', monospace",
+            cursor: sharing ? "wait" : "pointer",
+            opacity: sharing ? 0.5 : 1,
+            transition: "opacity 0.2s",
+          }}
+        >
+          {sharing ? "Generating..." : "Download Story"}
+        </button>
       </div>
 
       <ClusterGrid
